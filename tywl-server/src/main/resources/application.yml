@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:localhost
+server:
+  session:
+    cookie:
+      name: puxintech.tywl-v2
+mybatis:
+  config-location: classpath:conf/mybatis-config.xml
+  type-aliases-package: com.puxintech.tywl.model
+  mapper-locations: classpath:com/puxintech/tywl/dao/**/*.xml
+
+logging:
+  level:
+    com.puxintech.tywl.dao: debug

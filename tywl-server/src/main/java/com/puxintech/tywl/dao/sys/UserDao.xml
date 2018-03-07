@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puxintech.tywl.dao.sys.UserDao">
+
+	<sql id="params">
+		<where>
+			<if test="filter != null and filter != ''">
+				username like concat('%',#{filter},'%') or
+				first_name like concat('%',#{filter},'%') or
+				last_name like concat('%',#{filter},'%') or
+				email like concat('%',#{filter},'%') or
+				phone_number like concat('%',#{filter},'%')
+			</if>
+		</where>
+	</sql>
+
+	<select id="findAll" resultType="User">
+		select * from `user`
+		<include refid="params" />
+	</select>
+
+	<select id="findByPage" resultType="User">
+		select * from `user`
+		<include refid="params" />
+
+		<if test="page.sortBy != null and page.sortBy != ''">
+			order by ${page.sortBy} ${page.direction}
+		</if>
+		<if test="page.size != null and page.size > 0">
+			limit ${page.size}
+		</if>
+		<if test="page.offset != null and page.offset > 0">
+			offset ${page.offset}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(0) from `user`
+		<include refid="params" />
+	</select>
+
+	<insert id="create" keyProperty="id" useGeneratedKeys="true">
+		insert into `user`
+		(
+		username,
+		password,
+		first_name,
+		last_name,
+		email,
+		phone_number,
+		gender,
+		is_enabled
+		)
+		values(
+		#{username},
+		#{password},
+		#{firstName},
+		#{lastName},
+		#{email},
+		#{phoneNumber},
+		#{gender},
+		#{isEnabled}
+		)
+	</insert>
+</mapper>

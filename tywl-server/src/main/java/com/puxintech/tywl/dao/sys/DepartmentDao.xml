@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puxintech.tywl.dao.sys.DepartmentDao">
+
+	<sql id="params">
+		<where>
+			<if test="filter != null and filter != ''">
+				name like concat('%',#{filter},'%')
+			</if>
+		</where>
+	</sql>
+
+	<select id="findAll" resultType="Department">
+		select * from department
+		<include refid="params" />
+	</select>
+
+	<select id="findByPage" resultType="Department">
+		select * from department
+		<include refid="params" />
+
+		<if test="page.sortBy != null and page.sortBy != ''">
+			order by ${page.sortBy} ${page.direction}
+		</if>
+		<if test="page.size != null and page.size > 0">
+			limit ${page.size}
+		</if>
+		<if test="page.offset != null and page.offset > 0">
+			offset ${page.offset}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(0) from department
+		<include refid="params" />
+	</select>
+
+	<insert id="create" keyProperty="id" useGeneratedKeys="true">
+		insert
+		into department(name, type, description) values(#{name}, #{type},
+		#{description})
+	</insert>
+</mapper>
